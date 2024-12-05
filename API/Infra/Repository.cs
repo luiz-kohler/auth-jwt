@@ -19,9 +19,9 @@ namespace API.Infra
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
-        protected readonly DbContext _context;
+        protected readonly Context _context;
 
-        public Repository(DbContext context)
+        public Repository(Context context)
         {
             _context = context;
         }

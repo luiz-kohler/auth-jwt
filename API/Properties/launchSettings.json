@@ -16,7 +16,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5188",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Server=localhost;Database=db;User Id=sa;Password=Admin@123;Trusted_Connection=False;TrustServerCertificate=True; MultipleActiveResultSets=true"
       }
     },
     "https": {
@@ -26,7 +27,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7179;http://localhost:5188",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Server=localhost;Database=db;User Id=sa;Password=Admin@123;Trusted_Connection=False;TrustServerCertificate=True; MultipleActiveResultSets=true"
       }
     },
     "IIS Express": {
@@ -34,7 +36,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Server=localhost;Database=db;User Id=sa;Password=Admin@123;Trusted_Connection=False;TrustServerCertificate=True; MultipleActiveResultSets=true"
       }
     }
   }
