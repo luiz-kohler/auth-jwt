@@ -17,7 +17,6 @@ namespace API.DTOs
 
         [Required(ErrorMessage = "empty email", AllowEmptyStrings = false)]
         [RegularExpression(".+\\@.+\\..+", ErrorMessage = "invalid email")]
-
         public string Email { get; set; }
 
         [Required(ErrorMessage = "empty password", AllowEmptyStrings = false)]
