@@ -1,0 +1,18 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - SA_PASSWORD=Admin@123
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+
+  api:
+    ports:
+      - "8080:8080"
+    build:
+      context: ./API
+      args:
+        ENVIRONMENT: "DEV" 
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker Compose Develop"
