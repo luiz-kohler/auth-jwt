@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using API.Entities;
 using API.Infra;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Services
 {
@@ -20,6 +21,17 @@ namespace API.Services
 
         public async Task Create(UserRequest request)
         {
+            var validationContext = new ValidationContext(request);
+            var validationResults = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(request, validationContext, validationResults);
+
+            if(!isValid)
+            {
+                var errorMessages = validationResults.Select(result => $"{string.Join(", ", result.MemberNames)}: {result.ErrorMessage}");
+                var errorMessage = string.Join("; ", errorMessages);
+                throw new BadHttpRequestException($"Validation failed: {errorMessage}");
+            }
+
             var userWithSameEmail = await _userRepository.FirstOrDefaultWithWithNoTrackingAsync(user => user.Email == request.Email);
 
             if (userWithSameEmail != null)

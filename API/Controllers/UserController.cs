@@ -16,9 +16,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] UserRequest request)
+        public async Task<IActionResult> Create([FromBody] UserRequest request)
         {
-            _userService.Create(request);
+            await _userService.Create(request);
             return Ok();
         }
     }
