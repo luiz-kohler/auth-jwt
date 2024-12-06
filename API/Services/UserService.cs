@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Handlers;
 using API.Infra;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,11 +13,15 @@ namespace API.Services
 
     public class UserService : IUserService
     {
+        private readonly IHashHandler _hashHandler;
         private readonly IUserRepository _userRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(
+            IUserRepository userRepository,
+            IHashHandler hashHandler)
         {
             _userRepository = userRepository;
+            _hashHandler = hashHandler;
         }
 
         public async Task Create(UserRequest request)
@@ -41,7 +46,7 @@ namespace API.Services
             {
                 Email = request.Email,
                 Name = request.Name,
-                PasswordHashed = request.Password
+                PasswordHashed = _hashHandler.Hash(request.Password)
             };
 
             await _userRepository.AddAsync(user);
