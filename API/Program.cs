@@ -20,7 +20,7 @@ builder.Services.AddDbContext<Context>(opt => opt.UseSqlServer(builder.Configura
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.Configure<HashHandlerOptions>(builder.Configuration.GetSection("HashHandler"));
+builder.Services.Configure<HashHandlerOptions>(builder.Configuration);
 builder.Services.AddSingleton<IHashHandler, HashHandler>();
 
 builder.Services.AddExceptionHandler(options =>
