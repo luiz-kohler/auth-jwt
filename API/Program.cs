@@ -1,9 +1,13 @@
 using API.Handlers;
 using API.Infra;
 using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +27,16 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.Configure<HashHandlerOptions>(builder.Configuration);
 builder.Services.AddSingleton<IHashHandler, HashHandler>();
 
+builder.Services.Configure<TokenHandlerOptions>(builder.Configuration);
+builder.Services.AddSingleton<ITokenHandler, API.Handlers.TokenHandler>();
+
 builder.Services.AddExceptionHandler(options =>
 {
     options.ExceptionHandler = GlobalExceptionHandler.Handle;
     options.AllowStatusCode404Response = true;
 });
+
+builder.Services.ConfigureJWT(builder.Configuration["SecretKey"]);
 
 var app = builder.Build();
 

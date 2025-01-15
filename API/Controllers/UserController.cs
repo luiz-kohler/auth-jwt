@@ -1,5 +1,7 @@
 ﻿using API.DTOs;
+using API.Handlers;
 using API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -16,10 +18,25 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] UserRequest request)
         {
-            await _userService.Create(request);
-            return Ok();
+            var token = await _userService.Create(request);
+            return Ok(token);
+        }
+
+        [HttpGet("is-logged")]
+        [Authorize]
+        public async Task<IActionResult> IsLogged()
+        {
+            return Ok(new { message = "user is logged" });
+        }
+
+        [HttpGet("is-admin")]
+        [Authorize(Roles = Roles.Admin)]
+        public async Task<IActionResult> IsAdmin()
+        {
+            return Ok(new { message = "user is admin" });
         }
     }
 }

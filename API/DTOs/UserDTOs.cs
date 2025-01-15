@@ -7,6 +7,7 @@ namespace API.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public bool IsAdmin { get; set; }
     }
 
     public class UserRequest
@@ -20,5 +21,7 @@ namespace API.DTOs
         [Required(ErrorMessage = "empty password", AllowEmptyStrings = false)]
         [MinLength(8, ErrorMessage = "password must have at least 8 characters")]
         public string Password { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

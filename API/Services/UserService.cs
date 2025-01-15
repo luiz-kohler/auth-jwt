@@ -8,23 +8,26 @@ namespace API.Services
 {
     public interface IUserService
     {
-        Task Create(UserRequest request);
+        Task<string> Create(UserRequest request);
     }
 
     public class UserService : IUserService
     {
         private readonly IHashHandler _hashHandler;
+        private readonly ITokenHandler _tokenHandler;
         private readonly IUserRepository _userRepository;
 
         public UserService(
+            ITokenHandler tokenHandler,
             IUserRepository userRepository,
             IHashHandler hashHandler)
         {
             _userRepository = userRepository;
+            _tokenHandler = tokenHandler;
             _hashHandler = hashHandler;
         }
 
-        public async Task Create(UserRequest request)
+        public async Task<string> Create(UserRequest request)
         {
             var validationContext = new ValidationContext(request);
             var validationResults = new List<ValidationResult>();
@@ -46,11 +49,15 @@ namespace API.Services
             {
                 Email = request.Email,
                 Name = request.Name,
-                PasswordHashed = _hashHandler.Hash(request.Password)
+                PasswordHashed = _hashHandler.Hash(request.Password),
+                TokenRefresh = string.Empty,
+                IsAdmin = request.IsAdmin
             };
 
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
+
+            return _tokenHandler.GenerateAccessToken(user);
         }
     }
 }
