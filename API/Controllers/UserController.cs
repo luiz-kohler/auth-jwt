@@ -25,6 +25,14 @@ namespace API.Controllers
             return Ok(token);
         }
 
+        [HttpPost("sign-in")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
+        {
+            var token = await _userService.SignIn(request);
+            return Ok(token);
+        }
+
         [HttpGet("is-logged")]
         [Authorize]
         public async Task<IActionResult> IsLogged()

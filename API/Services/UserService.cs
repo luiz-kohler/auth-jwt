@@ -9,6 +9,7 @@ namespace API.Services
     public interface IUserService
     {
         Task<string> Create(UserRequest request);
+        Task<string> SignIn(SignInRequest request);
     }
 
     public class UserService : IUserService
@@ -40,7 +41,7 @@ namespace API.Services
                 throw new BadHttpRequestException($"Validation failed: {errorMessage}");
             }
 
-            var userWithSameEmail = await _userRepository.FirstOrDefaultWithWithNoTrackingAsync(user => user.Email == request.Email);
+            var userWithSameEmail = await _userRepository.FirstOrDefaultWithNoTrackingAsync(user => user.Email == request.Email);
 
             if (userWithSameEmail != null)
                 throw new BadHttpRequestException("there is already user with same email");
@@ -56,6 +57,19 @@ namespace API.Services
 
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
+
+            return _tokenHandler.GenerateAccessToken(user);
+        }
+
+        public async Task<string> SignIn(SignInRequest request)
+        {
+            var user = await _userRepository.FirstOrDefaultWithNoTrackingAsync(user => user.Email == request.Email);
+
+            if(user == null)
+                throw new BadHttpRequestException("email is not linked to an account");
+
+            if(!_hashHandler.Verify(request.Password, user.PasswordHashed))
+                throw new BadHttpRequestException("Invalid email or password");
 
             return _tokenHandler.GenerateAccessToken(user);
         }

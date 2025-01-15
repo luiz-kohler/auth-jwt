@@ -9,7 +9,7 @@ namespace API.Infra
         Task AddAsync(TEntity entity);
         void Remove(TEntity entity);
         Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
-        Task<TEntity?> FirstOrDefaultWithWithNoTrackingAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity?> FirstOrDefaultWithNoTrackingAsync(Expression<Func<TEntity, bool>> predicate);
         Task<IEnumerable<TEntity>> GetAllAsync(Func<TEntity, bool>? predicate = null);
         Task<IEnumerable<TEntity>> GetAllWithNoTrackingAsync(Func<TEntity, bool>? predicate = null);
         void Update(TEntity entity);
@@ -42,7 +42,7 @@ namespace API.Infra
         }
 
 
-        public async Task<TEntity?> FirstOrDefaultWithWithNoTrackingAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity?> FirstOrDefaultWithNoTrackingAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(predicate);
         }
