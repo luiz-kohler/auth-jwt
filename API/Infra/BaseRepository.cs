@@ -16,38 +16,38 @@ namespace API.Infra
         Task SaveChangesAsync();
     }
 
-    public class Repository<TEntity> : IRepository<TEntity>
+    public class BaseRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
         protected readonly Context _context;
 
-        public Repository(Context context)
+        public BaseRepository(Context context)
         {
             _context = context;
         }
 
-        public async Task AddAsync(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
             await _context.Set<TEntity>().AddAsync(entity);
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
             _context.Set<TEntity>().Remove(entity);
         }
 
-        public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
 
-        public async Task<TEntity?> FirstOrDefaultWithNoTrackingAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<TEntity?> FirstOrDefaultWithNoTrackingAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<TEntity, bool>? predicate = null)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<TEntity, bool>? predicate = null)
         {
             var query = _context.Set<TEntity>().AsQueryable();
 
@@ -57,7 +57,7 @@ namespace API.Infra
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllWithNoTrackingAsync(Func<TEntity, bool>? predicate = null)
+        public virtual async Task<IEnumerable<TEntity>> GetAllWithNoTrackingAsync(Func<TEntity, bool>? predicate = null)
         {
             var query = _context.Set<TEntity>().AsNoTracking().AsQueryable();
 
@@ -67,12 +67,12 @@ namespace API.Infra
             return await query.ToListAsync();
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             _context.Set<TEntity>().Update(entity);
         }
 
-        public async Task SaveChangesAsync()
+        public virtual async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
         }

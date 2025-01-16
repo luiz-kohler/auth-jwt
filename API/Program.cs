@@ -22,13 +22,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Context>(opt => opt.UseSqlServer(builder.Configuration["ConnectionString"]));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 builder.Services.Configure<HashHandlerOptions>(builder.Configuration);
 builder.Services.AddSingleton<IHashHandler, HashHandler>();
 
 builder.Services.Configure<TokenHandlerOptions>(builder.Configuration);
-builder.Services.AddSingleton<ITokenHandler, API.Handlers.TokenHandler>();
+builder.Services.AddScoped<ITokenHandler, API.Handlers.TokenHandler>();
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddExceptionHandler(options =>
 {

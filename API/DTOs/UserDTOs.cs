@@ -26,4 +26,10 @@ namespace API.DTOs
         [MinLength(8, ErrorMessage = "password must have at least 8 characters")]
         public string Password { get; set; }
     }
+
+    public class RefreshTokenModel
+    {
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+    }
 }

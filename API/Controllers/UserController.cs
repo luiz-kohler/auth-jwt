@@ -33,6 +33,20 @@ namespace API.Controllers
             return Ok(token);
         }
 
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+            var request = new RefreshTokenModel 
+            {
+                AccessToken = HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "") ?? "",
+                RefreshToken = refreshToken,
+            };
+
+            var token = await _userService.RefreshToken(request);
+            return Ok(token);
+        }
+
         [HttpGet("is-logged")]
         [Authorize]
         public async Task<IActionResult> IsLogged()
@@ -41,7 +55,7 @@ namespace API.Controllers
         }
 
         [HttpGet("is-admin")]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.ADMIN)]
         public async Task<IActionResult> IsAdmin()
         {
             return Ok(new { message = "user is admin" });
